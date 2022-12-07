@@ -1,0 +1,23 @@
+{
+  "name": "todo-server",
+  "version": "1.0.0",
+  "description": "Här lagras kod för labb2 GIK2F8.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Truztie/gik2f8-ht22-lab2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Truztie/gik2f8-ht22-lab2/issues"
+  },
+  "homepage": "https://github.com/Truztie/gik2f8-ht22-lab2#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

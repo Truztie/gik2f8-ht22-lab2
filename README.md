@@ -1,0 +1,1 @@
+Här lagras kod för labb2 GIK2F8.
