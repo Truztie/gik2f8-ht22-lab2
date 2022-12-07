@@ -36,7 +36,7 @@ function validateField(field){
         }
         case "dueDate":{
             if(value.length === 0){
-                descriptionValid = false;
+                dueDateValid = false;
                 validationMessage = "The field 'Due Date' must use a valid Due Date.";
             }
             break;
