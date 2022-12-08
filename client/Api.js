@@ -5,6 +5,7 @@ class Api {
         this.url = url;
     }
 
+    /*create = POST */
     create(data){
         const JSONData = JSON.stringify(data);
         console.log(`Sending ${JSONData} to ${this.url}`);
@@ -17,16 +18,26 @@ class Api {
             }
         });
 
-        console.log(request);
-
-        return fetch(request).then((result) => result.json()).then((data) => data).catch((err) => console.log(err));
+        return fetch(request)
+            .then((result) => result.json())
+            .then((data) => data)
+            .catch((err) => console.log(err));
     }
-
+    /*read = GET */
     getAll(){
-
+        return fetch(this.url)
+        .then(result => result.json())
+        .then((data) => data);
     }
 
-    remove(){
+    /*delete = DELETE */
+    remove(id){
+        console.log(`Removing task with id ${id}`);
 
+        return fetch(`${this.url}/${id}`,{
+            method: "DELETE"
+        })
+            .then((result) => result)
+            .catch((err) => console.log(err));
     }
 }

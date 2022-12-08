@@ -7,6 +7,8 @@ todoForm.dueDate.addEventListener("blur", (e) => validateField(e.target));
 
 todoForm.addEventListener("submit", onSubmit);
 
+const todoListElement = document.getElementById("todoList");
+
 let titleValid = true;
 let descriptionValid = true;
 let dueDateValid = true;
@@ -24,6 +26,8 @@ function validateField(field){
             }else if(value.length > 100){
                 titleValid = false;
                 validationMessage = "The field 'Title' can only contain a maximum of 100 characters.";
+            }else{
+                titleValid = true;
             }
             break;
         }
@@ -31,13 +35,17 @@ function validateField(field){
             if(value.length > 500){
                 descriptionValid = false;
                 validationMessage = "The field 'Description' can only contain a maximum of 500 characters.";
+            }else{
+                descriptionValid = true;
             }
             break;
         }
         case "dueDate":{
-            if(value.length == 0){
+            if(value.length === 0){
                 dueDateValid = false;
                 validationMessage = "The field 'Due Date' must use a valid Due Date.";
+            }else {
+                dueDateValid = true;
             }
             break;
         }
@@ -54,24 +62,58 @@ function onSubmit(e){
         console.log("Submit");
         saveTask();
     }
-
-    function saveTask(){
-        const task = {
-            title: todoForm.title.value, 
-            description: todoForm.description.value,
-            dueDate: todoForm.dueDate.value,
-            completed: false
-        };
-
-        api.create(task).then((task) => {
-            if(task){
-                render()
-            }
-        });
-        
-    }
 }
 
-function render(){
+function saveTask(){
+    const task = {
+        title: todoForm.title.value, 
+        description: todoForm.description.value,
+        dueDate: todoForm.dueDate.value,
+        completed: false
+    };
+
+    api.create(task).then((task) => {
+        if(task){
+            renderList()
+        }
+    });
+    
+}
+
+function renderList(){
     console.log("rendering");
+    api.getAll().then(tasks => {
+        todoListElement.innerHTML = "";
+        if(tasks && tasks.length > 0){
+            tasks.forEach(task => {
+                todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
+            });
+        }
+        /*generera lista av uppgifter */
+    })
 }
+
+function renderTask({id, title, description, dueDate}) {
+    let html = `<li class="select-none mt-2 py-2 border-b border-amber-300">
+                    <div class="flex item-center">
+                        <h3 class=" mb-3 flex-1 text-xl font-bold text-pink-800 uppercase">${title}</h3>
+                        <div>
+                            <span>${dueDate}</span>
+                            <button onclick="deleteTask(${id})" class="inline-block bg-amber-500 text-xs text-amber-900 border border-white px-3 py-1 rounded-md ml-2">Delete</button>
+                        </div>
+                    </div>`
+    description && (
+        html += `<p class="ml-8 mt-2 text-xs italic">${description}</p>`
+    );
+    html += `</li>`;
+
+    return html;
+};
+
+function deleteTask(id){
+    api.remove(id).then((result) => {
+        renderList();
+    });
+}
+
+renderList();
