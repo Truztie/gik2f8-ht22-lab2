@@ -5,13 +5,13 @@ todoForm.description.addEventListener("blur", (e) => validateField(e.target));
 todoForm.dueDate.addEventListener("input", (e) => validateField(e.target));
 todoForm.dueDate.addEventListener("blur", (e) => validateField(e.target));
 
-todoForm.addEventListener("submit", onSubmit)
+todoForm.addEventListener("submit", onSubmit);
 
 let titleValid = true;
 let descriptionValid = true;
 let dueDateValid = true;
 
-const api = new Api("localhost:5000/tasks");
+const api = new Api("http://localhost:5000/tasks");
 
 function validateField(field){
     const { name, value } = field;
@@ -35,7 +35,7 @@ function validateField(field){
             break;
         }
         case "dueDate":{
-            if(value.length === 0){
+            if(value.length == 0){
                 dueDateValid = false;
                 validationMessage = "The field 'Due Date' must use a valid Due Date.";
             }
@@ -63,7 +63,15 @@ function onSubmit(e){
             completed: false
         };
 
-        api.create(task);
+        api.create(task).then((task) => {
+            if(task){
+                render()
+            }
+        });
         
     }
+}
+
+function render(){
+    console.log("rendering");
 }
